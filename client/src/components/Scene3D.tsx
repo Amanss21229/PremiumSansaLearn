@@ -1,26 +1,60 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Stars, Environment, useGLTF } from "@react-three/drei";
-import { useRef, Suspense } from "react";
+import { OrbitControls, Stars, Environment, useGLTF, Html } from "@react-three/drei";
+import { useRef, Suspense, useState } from "react";
 import * as THREE from "three";
 
-function ModelMesh({ url }: { url: string }) {
+function Label({ position, text }: { position: [number, number, number], text: string }) {
+  const [hovered, setHovered] = useState(false);
+  
+  return (
+    <Html position={position} distanceFactor={10}>
+      <div 
+        className={`px-2 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all duration-300 cursor-help
+          ${hovered ? 'bg-primary text-black scale-110 shadow-lg shadow-primary/50' : 'bg-black/60 text-white border border-white/20'}`}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        {text}
+      </div>
+    </Html>
+  );
+}
+
+function ModelMesh({ url, modelType }: { url: string, modelType?: string }) {
   const { scene } = useGLTF(url);
   const meshRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005;
+      meshRef.current.rotation.y += 0.002;
     }
   });
 
-  return <primitive ref={meshRef} object={scene} scale={2.5} />;
+  // Position labels based on model type
+  const labels = modelType === "organ" ? [
+    { pos: [0.5, 0.8, 0], text: "Superior Vena Cava" },
+    { pos: [-0.6, 0.5, 0.2], text: "Aorta" },
+    { pos: [0, -0.8, 0.3], text: "Apex" }
+  ] : modelType === "molecule" ? [
+    { pos: [0, 0.6, 0], text: "Nucleus" },
+    { pos: [1, -0.5, 0], text: "Electrons" }
+  ] : [];
+
+  return (
+    <group ref={meshRef}>
+      <primitive object={scene} scale={2.5} rotation={[0, -Math.PI / 2, 0]} />
+      {labels.map((label, i) => (
+        <Label key={i} position={label.pos as [number, number, number]} text={label.text} />
+      ))}
+    </group>
+  );
 }
 
 function SubjectMesh({ type, modelUrl }: { type: string, modelUrl?: string | null }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
-    if (meshRef.current) {
+    if (meshRef.current && !modelUrl) {
       meshRef.current.rotation.y += 0.01;
       meshRef.current.rotation.z += 0.005;
     }
@@ -34,7 +68,7 @@ function SubjectMesh({ type, modelUrl }: { type: string, modelUrl?: string | nul
           <meshStandardMaterial color="#666666" wireframe />
         </mesh>
       }>
-        <ModelMesh url={modelUrl} />
+        <ModelMesh url={modelUrl} modelType={type} />
       </Suspense>
     );
   }
