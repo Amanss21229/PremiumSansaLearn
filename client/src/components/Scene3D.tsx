@@ -1,29 +1,22 @@
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Stars, Environment, Text } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Stars, Environment, useGLTF } from "@react-three/drei";
+import { useRef, Suspense } from "react";
 import * as THREE from "three";
-import logoImg from "@assets/icon-512_1771269029903.png";
 
-function LogoMesh() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const texture = useLoader(THREE.TextureLoader, logoImg);
+function ModelMesh({ url }: { url: string }) {
+  const { scene } = useGLTF(url);
+  const meshRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += 0.005;
-      meshRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
     }
   });
 
-  return (
-    <mesh ref={meshRef} scale={2.5}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial map={texture} />
-    </mesh>
-  );
+  return <primitive ref={meshRef} object={scene} scale={2.5} />;
 }
 
-function SubjectMesh({ type }: { type: string }) {
+function SubjectMesh({ type, modelUrl }: { type: string, modelUrl?: string | null }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
@@ -32,6 +25,19 @@ function SubjectMesh({ type }: { type: string }) {
       meshRef.current.rotation.z += 0.005;
     }
   });
+
+  if (modelUrl) {
+    return (
+      <Suspense fallback={
+        <mesh scale={2}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="#666666" wireframe />
+        </mesh>
+      }>
+        <ModelMesh url={modelUrl} />
+      </Suspense>
+    );
+  }
 
   // Render different shapes based on the subject type (simulating complex models)
   if (type === "organ") {
@@ -96,10 +102,11 @@ function SubjectMesh({ type }: { type: string }) {
 interface SceneProps {
   type: "logo" | "model";
   modelType?: string;
+  modelUrl?: string | null;
   className?: string;
 }
 
-export default function Scene3D({ type, modelType = "default", className }: SceneProps) {
+export default function Scene3D({ type, modelType = "default", modelUrl, className }: SceneProps) {
   return (
     <div className={className}>
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
@@ -107,7 +114,14 @@ export default function Scene3D({ type, modelType = "default", className }: Scen
         <pointLight position={[10, 10, 10]} intensity={1} color="#FFD700" />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#4444ff" />
         
-        {type === "logo" ? <LogoMesh /> : <SubjectMesh type={modelType} />}
+        {type === "logo" ? (
+          <mesh scale={2.5}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="#3b82f6" />
+          </mesh>
+        ) : (
+          <SubjectMesh type={modelType} modelUrl={modelUrl} />
+        )}
         
         <OrbitControls 
           enableZoom={type === "model"} 

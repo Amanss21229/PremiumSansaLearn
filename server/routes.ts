@@ -40,6 +40,7 @@ export async function seedDatabase() {
         category: "Biology",
         grade: "Class 10",
         type: "Organ",
+        modelUrl: "/models/human_heart.glb",
         isPremium: false,
       },
       {
@@ -48,6 +49,7 @@ export async function seedDatabase() {
         category: "Chemistry",
         grade: "Class 11",
         type: "Structure",
+        modelUrl: "/models/periodic_table.glb",
         isPremium: false,
       },
       {
@@ -56,14 +58,16 @@ export async function seedDatabase() {
         category: "Biology",
         grade: "Class 11",
         type: "Organ",
+        modelUrl: "/models/human_kidney.glb",
         isPremium: false,
       },
       {
-        title: "Liver Structure",
-        description: "Detailed view of the liver lobes and blood vessels. Class 11 Biology.",
+        title: "Human Digestive System",
+        description: "Detailed anatomical model of the human digestive system, showing esophagus, stomach, and intestines.",
         category: "Biology",
-        grade: "Class 11",
+        grade: "Class 10",
         type: "Organ",
+        modelUrl: "/models/human_digestive_system.glb",
         isPremium: false,
       },
       {
