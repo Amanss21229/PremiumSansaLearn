@@ -20,6 +20,11 @@ export async function registerRoutes(
     res.json(model);
   });
 
+  app.get(api.models.questions.list.path, async (req, res) => {
+    const questions = await storage.getQuestions(Number(req.params.id));
+    res.json(questions);
+  });
+
   await seedDatabase();
 
   return httpServer;
@@ -35,7 +40,7 @@ export async function seedDatabase() {
         category: "Biology",
         grade: "Class 10",
         type: "Organ",
-        isPremium: true,
+        isPremium: false,
       },
       {
         title: "Periodic Table",
@@ -51,7 +56,7 @@ export async function seedDatabase() {
         category: "Biology",
         grade: "Class 11",
         type: "Organ",
-        isPremium: true,
+        isPremium: false,
       },
       {
         title: "Liver Structure",
@@ -75,13 +80,23 @@ export async function seedDatabase() {
         category: "Biology",
         grade: "Class 12",
         type: "Organ",
-        isPremium: true,
+        isPremium: false,
       },
     ];
 
     for (const model of seedData) {
-      await storage.createModel(model);
+      const createdModel = await storage.createModel(model);
+      
+      // Seed 30 questions per model
+      for (let i = 1; i <= 30; i++) {
+        await storage.createQuestion({
+          modelId: createdModel.id,
+          question: `Sample Question ${i} for ${model.title}?`,
+          options: ["Option A", "Option B", "Option C", "Option D"],
+          correctAnswer: 0,
+        });
+      }
     }
-    console.log("Database seeded with 3D models");
+    console.log("Database seeded with 3D models and quizzes");
   }
 }

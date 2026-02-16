@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertModelSchema, models } from './schema';
+import { insertModelSchema, models, questions } from './schema';
 
 export const api = {
   models: {
@@ -16,6 +16,15 @@ export const api = {
       responses: {
         200: z.custom<typeof models.$inferSelect>(),
         404: z.object({ message: z.string() }),
+      },
+    },
+    questions: {
+      list: {
+        method: 'GET' as const,
+        path: '/api/models/:id/questions' as const,
+        responses: {
+          200: z.array(z.custom<typeof questions.$inferSelect>()),
+        },
       },
     },
   },
