@@ -56,7 +56,12 @@ export default function ModelViewer() {
       {/* Main 3D Viewport - 9:16 aspect ratio container centered */}
       <div className="flex-1 w-full h-full relative flex items-center justify-center bg-[#050505]">
         <div className="w-full h-full max-w-lg aspect-[9/16] relative border-x border-white/5 shadow-2xl">
-           <Scene3D type="model" modelType={model.type} className="w-full h-full" />
+           <Scene3D 
+             type="model" 
+             modelType={model.type} 
+             modelUrl={model.modelUrl}
+             className="w-full h-full" 
+           />
            
            {/* Mobile Interaction Hint */}
            <div className="absolute bottom-32 left-1/2 -translate-x-1/2 text-white/30 text-xs pointer-events-none animate-pulse">

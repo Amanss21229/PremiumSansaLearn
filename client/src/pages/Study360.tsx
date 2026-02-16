@@ -87,7 +87,12 @@ export default function Study360() {
                     {/* 3D Preview (Small) */}
                     <div className="h-48 bg-black/40 relative overflow-hidden">
                       <div className="absolute inset-0 group-hover:scale-110 transition-transform duration-700">
-                        <Scene3D type="model" modelType={model.type} className="w-full h-full" />
+                        <Scene3D 
+                          type="model" 
+                          modelType={model.type} 
+                          modelUrl={model.modelUrl}
+                          className="w-full h-full" 
+                        />
                       </div>
                       
                       <div className="absolute top-3 right-3">
