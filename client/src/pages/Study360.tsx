@@ -12,12 +12,12 @@ export default function Study360() {
 
   // Mock data for initial render if API is empty (for demo purposes)
   const displayModels = models?.length ? models : [
-    { id: 1, title: "Human Heart", category: "Biology", grade: "Class 10", type: "organ", isPremium: true },
-    { id: 2, title: "Periodic Table", category: "Chemistry", grade: "Class 11", type: "molecule", isPremium: false },
-    { id: 3, title: "Kidney Structure", category: "Biology", grade: "Class 10", type: "organ", isPremium: true },
-    { id: 4, title: "DNA Helix", category: "Biology", grade: "Class 12", type: "molecule", isPremium: true },
-    { id: 5, title: "Brain Anatomy", category: "Biology", grade: "Class 11", type: "organ", isPremium: true },
-    { id: 6, title: "Atomic Structure", category: "Physics", grade: "Class 9", type: "physics", isPremium: false },
+    { id: 1, title: "Human Heart", category: "Biology", grade: "Class 10", type: "organ", modelUrl: "/models/human_heart.glb", isPremium: true },
+    { id: 2, title: "Periodic Table", category: "Chemistry", grade: "Class 11", type: "molecule", modelUrl: "/models/periodic_table.glb", isPremium: false },
+    { id: 3, title: "Kidney Structure", category: "Biology", grade: "Class 10", type: "organ", modelUrl: "/models/human_kidney.glb", isPremium: true },
+    { id: 4, title: "DNA Helix", category: "Biology", grade: "Class 12", type: "molecule", modelUrl: null, isPremium: true },
+    { id: 5, title: "Brain Anatomy", category: "Biology", grade: "Class 11", type: "organ", modelUrl: null, isPremium: true },
+    { id: 6, title: "Atomic Structure", category: "Physics", grade: "Class 9", type: "physics", modelUrl: null, isPremium: false },
   ];
 
   const filteredModels = displayModels.filter(model => {

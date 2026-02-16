@@ -19,6 +19,7 @@ export default function ModelViewer() {
     category: "Science",
     grade: "Class 10",
     type: id % 2 === 0 ? "molecule" : "organ",
+    modelUrl: id === 1 ? "/models/human_heart.glb" : null,
     isPremium: true
   };
 
