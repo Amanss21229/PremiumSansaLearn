@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Sparkles, BookOpen, Layers } from "lucide-react";
 import Scene3D from "@/components/Scene3D";
+import AimAiChat from "@/components/AimAiChat";
 
 export default function Home() {
   return (
@@ -109,6 +110,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <AimAiChat />
     </div>
   );
 }
